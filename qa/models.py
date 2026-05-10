@@ -98,3 +98,27 @@ class UserProfile(models.Model):
     
     def __str__(self):
         return f"{self.user.username}'s profile"
+
+
+class Announcement(models.Model):
+    TAG_CHOICES = [
+        ('general', 'General'),
+        ('academic', 'Academic'),
+        ('event', 'Event'),
+        ('urgent', 'Urgent'),
+        ('placement', 'Placement'),
+        ('exam', 'Exam'),
+    ]
+    title = models.CharField(max_length=200)
+    content = models.TextField()
+    tag = models.CharField(max_length=20, choices=TAG_CHOICES, default='general')
+    author = models.ForeignKey(User, on_delete=models.CASCADE)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    is_pinned = models.BooleanField(default=False)
+
+    def __str__(self):
+        return self.title
+
+    class Meta:
+        ordering = ['-is_pinned', '-created_at']

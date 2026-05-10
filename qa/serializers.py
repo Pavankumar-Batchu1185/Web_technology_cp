@@ -1,7 +1,7 @@
 
 from rest_framework import serializers
 from django.contrib.auth.models import User
-from .models import Category, Tag, Question, Answer, UserProfile
+from .models import Category, Tag, Question, Answer, UserProfile, Announcement
 
 class UserSerializer(serializers.ModelSerializer):
     reputation = serializers.SerializerMethodField()
@@ -163,3 +163,14 @@ class UserProfileSerializer(serializers.ModelSerializer):
     
     def get_answer_count(self, obj):
         return Answer.objects.filter(author=obj.user).count()
+
+
+class AnnouncementSerializer(serializers.ModelSerializer):
+    author = UserSerializer(read_only=True)
+    tag_display = serializers.CharField(source='get_tag_display', read_only=True)
+
+    class Meta:
+        model = Announcement
+        fields = ['id', 'title', 'content', 'tag', 'tag_display', 'author',
+                  'is_pinned', 'created_at', 'updated_at']
+        read_only_fields = ['created_at', 'updated_at']

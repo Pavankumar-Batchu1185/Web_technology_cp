@@ -106,4 +106,11 @@ export const profileAPI = {
 },
 };
 
+export const announcementAPI = {
+  list: (params?: Record<string, string>) => api.get('/announcements/', { params }),
+  create: (data: any) => api.post('/announcements/', data),
+  update: (id: number, data: any) => api.patch(`/announcements/${id}/`, data),
+  delete: (id: number) => api.delete(`/announcements/${id}/`),
+};
+
 export default api;

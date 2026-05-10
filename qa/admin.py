@@ -1,6 +1,5 @@
 from django.contrib import admin
-from .models import Category, Question, Answer, Tag, UserProfile
-
+from .models import Category, Question, Answer, Tag, UserProfile, Announcement
 @admin.register(Category)
 class CategoryAdmin(admin.ModelAdmin):
     list_display = ['name', 'created_at']
@@ -23,4 +22,10 @@ class AnswerAdmin(admin.ModelAdmin):
 @admin.register(UserProfile)
 class UserProfileAdmin(admin.ModelAdmin):
     list_display = ['user', 'reputation']
+
+@admin.register(Announcement)
+class AnnouncementAdmin(admin.ModelAdmin):
+    list_display = ['title', 'tag', 'author', 'is_pinned', 'created_at']
+    list_filter = ['tag', 'is_pinned']
+    search_fields = ['title', 'content']
 

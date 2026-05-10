@@ -4,11 +4,11 @@ from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly
 from django.contrib.auth.models import User
 from django.db.models import Q, Count, F
-from .models import Category, Tag, Question, Answer, UserProfile
+from .models import Category, Tag, Question, Answer, UserProfile, Announcement
 from .serializers import (
     CategorySerializer, TagSerializer, QuestionListSerializer,
     QuestionDetailSerializer, QuestionCreateSerializer, AnswerSerializer,
-    UserProfileSerializer, UserSerializer
+    UserProfileSerializer, UserSerializer, AnnouncementSerializer
 )
 
 from rest_framework.parsers import MultiPartParser, FormParser
@@ -173,14 +173,19 @@ class UserProfileViewSet(viewsets.ReadOnlyModelViewSet):
     lookup_field = 'user__username'
     lookup_url_kwarg = 'user__username'
     parser_classes = [MultiPartParser, FormParser]
+    http_method_names = ['get', 'put', 'patch', 'head', 'options']
+
 
     def get_object(self):
         username = self.kwargs.get('user__username') or self.kwargs.get('pk')
         return UserProfile.objects.get(user__username=username)
 
-    @action(detail=False, methods=['get', 'put'], permission_classes=[IsAuthenticated])
+    @action(detail=False, methods=['get', 'put', 'patch'],
+            permission_classes=[IsAuthenticated],
+            parser_classes=[MultiPartParser, FormParser])
     def me(self, request):
         profile, _ = UserProfile.objects.get_or_create(user=request.user)
+
         if request.method == 'PUT':
             serializer = UserProfileSerializer(profile, data=request.data, partial=True)
             if serializer.is_valid():
@@ -189,3 +194,31 @@ class UserProfileViewSet(viewsets.ReadOnlyModelViewSet):
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         serializer = UserProfileSerializer(profile)
         return Response(serializer.data)
+    
+class AnnouncementViewSet(viewsets.ModelViewSet):
+    queryset = Announcement.objects.all()
+    serializer_class = AnnouncementSerializer
+
+    def get_permissions(self):
+        if self.action in ['list', 'retrieve']:
+            return [IsAuthenticatedOrReadOnly()]
+        return [IsAuthenticated()]
+
+    def perform_create(self, serializer):
+        # Only staff/admin can create announcements
+        user = self.request.user
+        is_staff_member = (
+            user.is_staff or
+            hasattr(user, 'staff_profile')
+        )
+        if not is_staff_member:
+            from rest_framework.exceptions import PermissionDenied
+            raise PermissionDenied("Only staff members can post announcements.")
+        serializer.save(author=user)
+
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        tag = self.request.query_params.get('tag')
+        if tag:
+            queryset = queryset.filter(tag=tag)
+        return queryset
