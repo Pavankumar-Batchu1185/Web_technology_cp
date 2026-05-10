@@ -92,7 +92,7 @@ export const categoryAPI = {
 
 export const profileAPI = {
   get: (username: string) => api.get(`/profiles/${username}/`),
-  me: () => api.get('/profiles/me/'),
+  me: () => api.get('/auth/me/'),  // Use auth/me instead of profiles/me
   update: (data: any) => {
   if (data instanceof FormData) {
     return api.put('/profiles/me/', data, {

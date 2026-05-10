@@ -33,7 +33,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     if (token) {
       profileAPI
         .me()
-        .then(({ data }) => setUser(data))   // ✅ Fixed: data IS the user, not data.user
+        .then(({ data }) => {
+          console.log('User data loaded:', data);
+          setUser(data);
+        })
         .catch(() => {
           localStorage.removeItem('access_token');
           localStorage.removeItem('refresh_token');
@@ -49,7 +52,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     localStorage.setItem('access_token', data.access);
     localStorage.setItem('refresh_token', data.refresh);
     const { data: profile } = await profileAPI.me();
-    setUser(profile);   // ✅ Fixed: profile IS the user, not profile.user
+    console.log('Login - User profile:', profile);
+    setUser(profile);
   };
 
   const logout = () => {

@@ -193,7 +193,7 @@ export default function QuestionDetailPage() {
   const sortedAnswers = [...bestAnswers, ...otherAnswers];
 
   return (
-    <div className="min-h-screen" style={{ background: '#F7F6F2', fontFamily: "'DM Sans', system-ui, sans-serif" }}>
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50/30 to-purple-50/20" style={{ fontFamily: "'DM Sans', system-ui, sans-serif" }}>
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=DM+Serif+Display:ital@0;1&display=swap');
 
@@ -227,7 +227,7 @@ export default function QuestionDetailPage() {
         ) : question ? (
           <div className="fade-in space-y-5">
 
-            <article className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+            <article className="bg-white rounded-2xl border border-slate-200 shadow-lg hover:shadow-xl transition-shadow overflow-hidden">
               <div className="p-5 sm:p-7">
                 <div className="flex gap-4 sm:gap-6">
 
@@ -259,7 +259,7 @@ export default function QuestionDetailPage() {
                         <div className="flex gap-2">
                           <button
                             onClick={handleEditQuestion}
-                            className="px-5 py-2 bg-slate-900 text-white text-sm font-semibold rounded-xl hover:bg-slate-700 active:scale-[0.98] transition-all"
+                            className="px-5 py-2 bg-gradient-to-r from-blue-500 to-purple-600 text-white text-sm font-semibold rounded-xl hover:from-blue-600 hover:to-purple-700 active:scale-[0.98] transition-all shadow-lg shadow-blue-500/30"
                           >
                             Save changes
                           </button>
@@ -372,9 +372,9 @@ export default function QuestionDetailPage() {
                   {sortedAnswers.map((answer, i) => (
                     <div
                       key={answer.id}
-                      className={`answer-card bg-white rounded-2xl border shadow-sm overflow-hidden transition-all ${
+                      className={`answer-card bg-white rounded-2xl border shadow-lg hover:shadow-xl overflow-hidden transition-all ${
                         answer.is_best
-                          ? 'border-emerald-400 ring-1 ring-emerald-300 ring-offset-1'
+                          ? 'border-emerald-400 ring-2 ring-emerald-300 ring-offset-2'
                           : 'border-slate-200'
                       }`}
                       style={{ animationDelay: `${i * 0.05}s` }}
@@ -433,7 +433,7 @@ export default function QuestionDetailPage() {
 
         
             {user ? (
-              <div className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+              <div className="bg-white rounded-2xl border border-slate-200 shadow-lg overflow-hidden">
                 <div className="px-5 sm:px-6 py-4 border-b border-slate-100 flex items-center justify-between">
                   <h3 className="text-sm font-bold text-slate-800">Your Answer</h3>
                   <div className="flex items-center gap-2 text-xs text-slate-400">
@@ -457,7 +457,7 @@ export default function QuestionDetailPage() {
                     <button
                       type="submit"
                       disabled={submitting || !answerContent.trim()}
-                      className="w-full sm:w-auto flex items-center justify-center gap-2 bg-slate-900 hover:bg-slate-700 disabled:bg-slate-200 disabled:text-slate-400 text-white px-6 py-2.5 rounded-xl font-semibold text-sm transition-all active:scale-[0.98]"
+                      className="w-full sm:w-auto flex items-center justify-center gap-2 bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 disabled:bg-slate-200 disabled:text-slate-400 text-white px-6 py-2.5 rounded-xl font-semibold text-sm transition-all active:scale-[0.98] shadow-lg shadow-blue-500/30 disabled:shadow-none"
                     >
                       {submitting ? (
                         <>
@@ -470,12 +470,12 @@ export default function QuestionDetailPage() {
                 </form>
               </div>
             ) : (
-              <div className="bg-slate-900 rounded-2xl p-8 text-center">
-                <p className="text-slate-300 text-sm mb-1 font-medium">Have an answer?</p>
-                <p className="text-slate-500 text-xs mb-5">Sign in to share your knowledge with the community</p>
+              <div className="bg-gradient-to-r from-blue-500 to-purple-600 rounded-2xl p-8 text-center shadow-lg">
+                <p className="text-white text-sm mb-1 font-medium">Have an answer?</p>
+                <p className="text-blue-100 text-xs mb-5">Sign in to share your knowledge with the community</p>
                 <Link
                   href="/login"
-                  className="inline-flex items-center gap-2 bg-white text-slate-900 px-7 py-2.5 rounded-xl font-bold text-sm hover:bg-slate-100 active:scale-[0.98] transition-all"
+                  className="inline-flex items-center gap-2 bg-white text-blue-600 px-7 py-2.5 rounded-xl font-bold text-sm hover:bg-blue-50 active:scale-[0.98] transition-all shadow-lg"
                 >
                   Log in to answer
                 </Link>
