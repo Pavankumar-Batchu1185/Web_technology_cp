@@ -11,6 +11,7 @@ interface User {
   role?: string;
   department?: string;
   is_staff?: boolean;
+  reputation?: number;
 }
 
 interface AuthContextType {

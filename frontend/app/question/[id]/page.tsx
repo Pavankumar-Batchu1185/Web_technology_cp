@@ -90,7 +90,7 @@ export default function QuestionDetailPage() {
 
   const fetchQuestion = async () => {
     try {
-      const { data } = await questionAPI.get(id);
+      const { data } = await questionAPI.get(parseInt(id));
       setQuestion(data);
       setEditTitle(data.title);
       setEditContent(data.content);
@@ -101,7 +101,7 @@ export default function QuestionDetailPage() {
 
   const fetchAnswers = async () => {
     try {
-      const { data } = await answerAPI.list(id);
+      const { data } = await answerAPI.list(parseInt(id));
       setAnswers(Array.isArray(data) ? data : data.results || []);
     } catch {}
     finally { setLoading(false); }
