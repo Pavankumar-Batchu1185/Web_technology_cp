@@ -153,9 +153,10 @@ class UserProfileSerializer(serializers.ModelSerializer):
     question_count = serializers.SerializerMethodField()
     answer_count = serializers.SerializerMethodField()
     
+    
     class Meta:
         model = UserProfile
-        fields = ['username', 'email', 'reputation', 'bio', 'date_joined', 'question_count', 'answer_count']
+        fields = ['username', 'email', 'reputation', 'bio', 'date_joined', 'question_count', 'answer_count', 'banner_image']
     
     def get_question_count(self, obj):
         return Question.objects.filter(author=obj.user).count()

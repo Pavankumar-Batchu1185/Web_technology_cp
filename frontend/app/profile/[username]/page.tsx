@@ -14,6 +14,7 @@ interface UserProfile {
   date_joined: string;
   question_count: number;
   answer_count: number;
+  banner_image?:string; 
 }
 interface Question { id: number; title: string; created_at: string; vote_score: number; answer_count: number; }
 interface Answer { id: number; content: string; created_at: string; vote_score: number; question: { id: number; title: string }; }
@@ -51,6 +52,7 @@ export default function ProfilePage() {
   const [activeTab, setActiveTab] = useState<'questions' | 'answers'>('questions');
   const [editingBio, setEditingBio] = useState(false);
   const [bioText, setBioText] = useState('');
+  const [bannerUploading, setBannerUploading] = useState(false);
 
   useEffect(() => {
     Promise.all([
@@ -75,6 +77,29 @@ export default function ProfilePage() {
       alert('Failed to update bio');
     }
   };
+
+  const handleBannerUpload = async ( e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+
+    if (!file) return;
+
+    const formData = new FormData();
+    formData.append('banner_image', file);
+
+    try {
+        setBannerUploading(true);
+
+        const { data } = await profileAPI.update(formData);
+
+        setProfile((prev) =>
+        prev ? { ...prev, banner_image: data.banner_image } : prev
+        );
+    } catch {
+        alert('Failed to upload banner');
+    } finally {
+        setBannerUploading(false);
+    }
+    };
 
   const isOwner = user?.username === username;
 
@@ -122,7 +147,7 @@ export default function ProfilePage() {
         }
 
         .banner-pattern {
-          background-color: #111;
+          background-color: #273183;
           background-image:
             linear-gradient(rgba(212,168,83,0.07) 1px, transparent 1px),
             linear-gradient(90deg, rgba(212,168,83,0.07) 1px, transparent 1px);
@@ -157,17 +182,85 @@ export default function ProfilePage() {
               <div className="fade-up fade-up-1 rounded-2xl overflow-hidden bg-white"
                 style={{ border: '1px solid #E8E4DD', boxShadow: '0 2px 12px rgba(0,0,0,0.05)' }}>
 
-                <div className="banner-pattern h-40 sm:h-48 relative flex items-center justify-end px-8 overflow-hidden">
+                            <div
+                                className="
+                                    h-40
+                                    sm:h-48
+                                    relative
+                                    flex
+                                    items-center
+                                    justify-end
+                                    px-8
+                                    overflow-hidden
+                                    group
+                                "
+                                style={{
+                                    backgroundImage: profile.banner_image
+                                    ? `url(${profile.banner_image})`
+                                    : undefined,
+
+                                    backgroundSize: 'cover',
+                                    backgroundPosition: 'center',
+                                    backgroundColor: '#4d4e56',
+                                }}>
+
+                                    <div
+                                    className="absolute inset-0"
+                                    style={{
+                                        background:
+                                        'linear-gradient(to top, rgba(0,0,0,0.5), rgba(0,0,0,0.15))',
+                                    }} />
+
+                                    {isOwner && (
+            <label
+                className=" 
+                absolute
+                top-4
+                right-4
+                z-20
+                cursor-pointer
+                px-4
+                py-2
+                rounded-xl
+                text-xs
+                font-bold
+                tracking-widest
+                uppercase
+                transition-all
+                hover:scale-105
+                "
+                style={{
+                background: 'rgba(0,0,0,0.45)',
+                color: 'white',
+                border: '1px solid rgba(255,255,255,0.15)',
+                backdropFilter: 'blur(10px)',
+                }}
+            >
+                {bannerUploading ? 'Uploading...' : 'Change Banner'}
+
+                <input
+                type="file"
+                accept="image/*"
+                hidden
+                onChange={handleBannerUpload}
+                />
+            </label>
+            )}
                   
-                  <span
-                    className="serif absolute -bottom-6 left-4 select-none pointer-events-none leading-none font-black"
-                    style={{ fontSize: 'clamp(100px,18vw,180px)', color: 'rgba(212,168,83,0.08)' }}
-                  >
-                    {profile.username.charAt(0).toUpperCase()}
-                  </span>
+                 {!profile.banner_image && (
+                    <span
+                        className="serif absolute -bottom-6 left-4 select-none pointer-events-none leading-none font-black"
+                        style={{
+                        fontSize: 'clamp(100px,18vw,180px)',
+                        color: 'rgba(212,168,83,0.08)'
+                        }}
+                    >
+                        {profile.username.charAt(0).toUpperCase()}
+                    </span>
+                    )}
 
                   
-                  <div className="flex items-center gap-2 px-4 py-2 rounded-xl"
+                  <div className="relative z-10 flex items-center gap-2 px-4 py-2 rounded-xl"
                     style={{ background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(212,168,83,0.3)' }}>
                     <svg className="w-4 h-4" style={{ color: '#D4A853' }} fill="currentColor" viewBox="0 0 20 20">
                       <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />

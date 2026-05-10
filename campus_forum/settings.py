@@ -20,7 +20,12 @@ SECRET_KEY = os.environ.get('SECRET_KEY', 'django-insecure-=&8qu73@zqk1#z6jm%6u9
 
 DEBUG = os.environ.get('DEBUG', 'True') == 'True'
 
-ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS', 'localhost').split(',')
+# ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS', '127.0.0.1').split(',')
+
+ALLOWED_HOSTS = [
+    '127.0.0.1',
+    'localhost',
+]
 
 
 # Application definition
@@ -74,10 +79,10 @@ WSGI_APPLICATION = 'campus_forum.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/6.0/ref/settings/#databases
 DATABASES = {
-    'default': dj_database_url.config(
-        default='postgresql://collegeuser:123456@localhost:5432/collegehub',
-        conn_max_age=600,
-    )
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
+    }
 }
 
 # Password validation
@@ -146,3 +151,8 @@ SIMPLE_JWT = {
 # CORS settings
 _cors_origins = os.environ.get('CORS_ALLOWED_ORIGINS', 'http://localhost:3000,http://localhost:3001')
 CORS_ALLOWED_ORIGINS = [o.strip() for o in _cors_origins.split(',')]
+
+CSRF_TRUSTED_ORIGINS = [
+    "http://localhost:3000",
+    "http://127.0.0.1:3000",
+]

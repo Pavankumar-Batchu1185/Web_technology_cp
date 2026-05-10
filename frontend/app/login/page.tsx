@@ -42,10 +42,78 @@ function LoginForm() {
   return (
     <>
       <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=DM+Mono:wght@400;500&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap');
 
-        .login-root { font-family: 'DM Mono', 'Courier New', monospace; }
-        .serif { font-family: 'Playfair Display', Georgia, serif; }
+        .login-root {
+  font-family: 'Outfit', sans-serif;
+}
+
+
+        .serif {
+        font-family: 'Outfit', sans-serif;
+        letter-spacing: -0.04em;
+        }
+
+        .panel-logo {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  width: fit-content;
+  text-decoration: none;
+
+  transition:
+    transform 0.25s ease,
+    opacity 0.25s ease;
+}
+
+.panel-logo:hover {
+  transform: translateY(-2px);
+}
+
+.logo-mark {
+  width: 56px;
+  height: 56px;
+
+  border-radius: 18px;
+
+  background: linear-gradient(
+    135deg,
+    #3B82F6,
+    #60A5FA
+  );
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  box-shadow:
+    0 0 25px rgba(59,130,246,0.35),
+    inset 0 1px 1px rgba(255,255,255,0.2);
+}
+
+.logo-mark span {
+  font-weight: 800;
+  font-size: 28px;
+  color: white;
+  line-height: 1;
+
+  letter-spacing: -0.05em;
+}
+
+.logo-name {
+  font-family: 'Outfit', sans-serif;
+
+  font-size: 2rem;
+  font-weight: 800;
+
+  letter-spacing: -0.06em;
+
+  color: white;
+
+  text-shadow:
+    0 0 12px rgba(255,255,255,0.08);
+}
 
         .field-line {
           position: relative;
@@ -84,7 +152,7 @@ function LoginForm() {
         .submit-btn:hover { background: #C49843; }
 
         .geo-bg {
-          background-color: #0C0C0C;
+          background-color: #07111F;
           background-image:
             linear-gradient(rgba(212,168,83,0.06) 1px, transparent 1px),
             linear-gradient(90deg, rgba(212,168,83,0.06) 1px, transparent 1px);
@@ -101,6 +169,10 @@ function LoginForm() {
         .fade-up-3 { animation-delay: 0.19s; }
         .fade-up-4 { animation-delay: 0.26s; }
         .fade-up-5 { animation-delay: 0.33s; }
+
+
+
+
       `}</style>
 
       <div className="login-root min-h-screen flex" style={{ background: '#0C0C0C' }}>
@@ -126,7 +198,7 @@ function LoginForm() {
           </div>
 
           
-          <Link href="/" className="relative flex items-center gap-3 group w-fit">
+          {/* <Link href="/" className="relative flex items-center gap-3 group w-fit">
             <div className="w-10 h-10 flex items-center justify-center"
               style={{ border: '1.5px solid rgba(212,168,83,0.5)' }}>
               <span className="serif text-xl font-bold" style={{ color: '#D4A853' }}>Q</span>
@@ -134,7 +206,59 @@ function LoginForm() {
             <span className="text-sm font-medium tracking-[0.2em] text-white/70 uppercase group-hover:text-white transition-colors">
               Campus<span style={{ color: '#D4A853' }}>QA</span>
             </span>
-          </Link>
+          </Link> */}
+
+         <Link
+  href="/"
+  className="
+    flex
+    items-center
+    gap-4
+    group
+    w-fit
+  "
+>
+  <div
+    className="
+      w-14
+      h-14
+      rounded-2xl
+      flex
+      items-center
+      justify-center
+      bg-gradient-to-br
+      from-blue-500
+      to-blue-400
+      shadow-[0_0_30px_rgba(59,130,246,0.35)]
+      transition-all
+      duration-300
+      group-hover:scale-105
+    "
+  >
+    <span
+      className="
+        text-white
+        text-3xl
+        font-black
+        tracking-tight
+      "
+    >
+      Q
+    </span>
+  </div>
+
+  <span
+    className="
+      text-white
+      text-[2rem]
+      font-black
+      tracking-[-0.06em]
+      leading-none
+    "
+  >
+    CampusQA
+  </span>
+</Link>
 
           
           <div className="relative">
@@ -177,12 +301,14 @@ function LoginForm() {
             <Link href="/" className="flex items-center gap-2.5 mb-12 lg:hidden w-fit">
               <div className="w-8 h-8 flex items-center justify-center"
                 style={{ border: '1.5px solid #D4A853' }}>
-                <span className="serif font-bold text-base" style={{ color: '#D4A853' }}>Q</span>
+                <span className="serif logo-mark font-bold text-base" style={{ color: '#D4A853' }}>Q</span>
               </div>
               <span className="text-xs tracking-[0.25em] uppercase font-medium text-gray-600">
                 Campus<span style={{ color: '#D4A853' }}>QA</span>
               </span>
             </Link>
+
+                      
 
           
             <div className="fade-up fade-up-1 mb-10">

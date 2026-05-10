@@ -601,10 +601,60 @@ export default function SignupPage() {
           <div className="panel-noise" />
           <div className="panel-glow" />
 
-          <Link href="/" className="panel-logo">
-            <div className="logo-mark"><span>Q</span></div>
-            <span className="logo-name">CampusQA</span>
-          </Link>
+         <Link
+  href="/"
+  className="
+    flex
+    items-center
+    gap-4
+    group
+    w-fit
+  "
+>
+  <div
+    className="
+      w-14
+      h-14
+      rounded-2xl
+      flex
+      items-center
+      justify-center
+      bg-gradient-to-br
+      from-blue-500
+      to-blue-400
+      shadow-[0_0_30px_rgba(59,130,246,0.35)]
+      transition-all
+      duration-300
+      group-hover:scale-105
+    "
+  >
+    <span
+      className="
+        text-white
+        text-3xl
+        font-black
+        tracking-tight
+        font-family: 'Syne', sans-serif;
+        
+      "
+    >
+      Q
+    </span>
+  </div>
+
+  <span
+    className="
+      text-white
+      text-[2rem]
+      font-black
+      tracking-[-0.06em]
+      leading-none
+      font-family: 'Syne', sans-serif;
+    "
+  >
+    CampusQA
+  </span>
+</Link>
 
           <div className="panel-main">
             <p className="panel-headline">

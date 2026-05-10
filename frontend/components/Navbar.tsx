@@ -121,35 +121,33 @@ export default function Navbar() {
   };
 
   return (
-    <nav className="bg-white border-b-2 border-gray-900 sticky top-0 z-50">
+    <nav className="bg-white shadow-lg  sticky top-0 z-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between h-16 gap-4">
 
-          {/* Logo + Links */}
           <div className="flex items-center gap-8">
-            <Link href="/" className="flex items-center gap-2.5">
+            <Link href="/" className=" flex items-center gap-2.5">
               <div className="w-9 h-9 bg-gray-900 rounded-lg flex items-center justify-center">
                 <span className="text-white font-black text-lg tracking-tight">Q</span>
               </div>
-              <span className="text-xl font-black text-gray-900 tracking-tight">CampusQA</span>
+              <span className="rounded-full text-xl link-glow font-primary text-black px-3 py-1.5 tracking-tight">CampusQA</span>
             </Link>
 
             <div className="hidden md:flex items-center gap-1">
-              <Link href="/" className="px-3 py-1.5 text-sm font-semibold text-gray-700 hover:text-gray-900 hover:bg-gray-100 rounded-md transition-colors">
+              <Link href="/" className="link-glow px-3 py-1.5 text-sm font text-gray-900 hover:text-gray-900 hover:bg-gray-100 hover:-translate-y-0.5 hover:shadow transition-300 rounded-full transition-colors">
                 Questions
               </Link>
-              <Link href="/achievements" className="px-3 py-1.5 text-sm font-semibold text-gray-700 hover:text-gray-900 hover:bg-gray-100 rounded-md transition-colors">
+              <Link href="/achievements" className="link-glow px-3 py-1.5 text-sm font text-gray-900 hover:text-gray-900 hover:bg-gray-100 hover:-translate-y-0.5 hover:shadow transition-300 rounded-full transition-colors">
                 Achievements
               </Link>
               {!loading && user && (
-                <Link href="/ask" className="px-3 py-1.5 text-sm font-semibold text-gray-700 hover:text-gray-900 hover:bg-gray-100 rounded-md transition-colors">
+                <Link href="/ask" className="link-glow px-3 py-1.5 text-sm font text-gray-900 hover:text-gray-900 hover:bg-gray-100 hover:-translate-y-0.5 hover:shadow transition-300 rounded-full transition-colors">
                   Ask
                 </Link>
               )}
             </div>
           </div>
 
-          {/* Search */}
           <div ref={searchContainerRef} className="flex-1 max-w-lg mx-4 hidden sm:flex items-center relative">
             <form onSubmit={handleSearch} className="w-full">
               <div className="relative w-full">
@@ -165,7 +163,7 @@ export default function Navbar() {
                     if (suggestions.length > 0) setShowSuggestions(true);
                   }}
                   placeholder="Search questions..."
-                  className="w-full pl-10 pr-4 py-2 bg-gray-100 border-2 border-transparent rounded-lg text-sm font-medium text-gray-900 placeholder-gray-500 focus:outline-none focus:bg-white focus:border-gray-900 transition-all"
+                  className="w-full pl-10 pr-4 py-2 bg-gray-100 border-2 border-transparent rounded-full text-sm font-medium text-gray-900 placeholder-gray-400 focus:outline-none focus:bg-white hover:shadow-md hover:bg-white focus:border-blue-400  focus:shadow-lg transition-all"
                   autoComplete="off"
                 />
               </div>
@@ -196,7 +194,6 @@ export default function Navbar() {
             )}
           </div>
 
-          {/* Right side */}
           <div className="flex items-center gap-3">
             {!loading && !user ? (
               <>
@@ -211,9 +208,9 @@ export default function Navbar() {
               <div className="relative">
                 <button
                   onClick={() => setShowUserMenu(!showUserMenu)}
-                  className="flex items-center gap-2.5 px-2 py-1.5 hover:bg-gray-100 rounded-lg transition-colors border-2 border-transparent hover:border-gray-200"
+                  className="flex items-center gap-2.5 px-2 py-1.5 hover:bg-gray-100 rounded-full transition-colors border-2 border-transparent hover:border-gray-200"
                 >
-                  <div className="w-8 h-8 bg-gray-900 rounded-lg flex items-center justify-center text-white font-black text-sm">
+                  <div className="w-8 h-8 bg-blue-400 shadow-xl rounded-full flex items-center justify-center text-white font-black text-sm">
                     {user?.username?.charAt(0).toUpperCase() || 'U'}
                   </div>
                   <span className="text-sm font-bold text-gray-900 hidden sm:block">{user?.username}</span>
@@ -225,10 +222,10 @@ export default function Navbar() {
                 {showUserMenu && (
                   <>
                     <div className="fixed inset-0 z-10" onClick={() => setShowUserMenu(false)} />
-                    <div className="absolute right-0 mt-2 w-52 bg-white rounded-xl shadow-xl border-2 border-gray-900 py-1 z-20 overflow-hidden">
-                      <div className="px-4 py-3 bg-gray-900 mb-1">
-                        <p className="text-xs font-semibold text-gray-400 uppercase tracking-wider">Signed in as</p>
-                        <p className="text-sm font-bold text-white truncate">{user?.username}</p>
+                    <div className="absolute right-0 mt-2 w-52 bg-white rounded-xl shadow-xl  border-gray-900 py-1 z-20 overflow-hidden">
+                      <div className="px-4 py-3 bg-gray-500 mb-1">
+                        <p className="text-xs font-semibold text-white-400 uppercase tracking-wider">Signed in as</p>
+                        <p className="text-sm font-bold text-black truncate">{user?.username}</p>
                       </div>
                       <Link
                         href={`/profile/${user?.username}`}

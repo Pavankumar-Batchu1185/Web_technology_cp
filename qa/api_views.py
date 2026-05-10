@@ -11,6 +11,8 @@ from .serializers import (
     UserProfileSerializer, UserSerializer
 )
 
+from rest_framework.parsers import MultiPartParser, FormParser
+
 class CategoryViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
@@ -170,6 +172,7 @@ class UserProfileViewSet(viewsets.ReadOnlyModelViewSet):
     serializer_class = UserProfileSerializer
     lookup_field = 'user__username'
     lookup_url_kwarg = 'user__username'
+    parser_classes = [MultiPartParser, FormParser]
 
     def get_object(self):
         username = self.kwargs.get('user__username') or self.kwargs.get('pk')
