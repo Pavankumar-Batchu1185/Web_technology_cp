@@ -1,0 +1,97 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div style="display: flex; justify-content: space-between; align-items: start;">
+    <div>
+        <h1>{{ question.title }}</h1>
+    </div>
+    <div>
+        {% if user == question.author %}
+            <a href="{% url 'edit_question' question.pk %}" class="btn btn-sm">Edit</a>
+            <a href="{% url 'delete_question' question.pk %}" class="btn btn-sm btn-danger" onclick="return confirm('Delete this question?')">Delete</a>
+        {% endif %}
+    </div>
+</div>
+
+<div style="display: flex; gap: 15px; margin: 20px 0;">
+    <div style="text-align: center;">
+        <form method="post" action="{% url 'vote_question' question.pk 'up' %}" style="display: inline;">
+            {% csrf_token %}
+            <button type="submit" class="vote-btn {% if user in question.upvotes.all %}active{% endif %}">▲ {{ question.upvotes.count }}</button>
+        </form>
+        <div style="font-size: 20px; margin: 5px 0;">{{ question.vote_score }}</div>
+        <form method="post" action="{% url 'vote_question' question.pk 'down' %}" style="display: inline;">
+            {% csrf_token %}
+            <button type="submit" class="vote-btn {% if user in question.downvotes.all %}active{% endif %}">▼ {{ question.downvotes.count }}</button>
+        </form>
+    </div>
+    <div style="flex: 1;">
+        {% if question.image %}
+            <img src="{{ question.image.url }}" alt="{{ question.title }}" style="max-width: 600px; margin: 15px 0;">
+        {% endif %}
+        <p>{{ question.content }}</p>
+        <div>
+            {% for tag in question.tags.all %}
+                <span style="background: #e0e0e0; padding: 3px 8px; margin-right: 5px; border-radius: 3px; font-size: 12px;">{{ tag.name }}</span>
+            {% endfor %}
+        </div>
+        <small>
+            Category: {{ question.category.name }} | 
+            By: <a href="{% url 'user_profile' question.author.username %}">{{ question.author.username }}</a> ({{ question.author.userprofile.reputation|default:0 }}) | 
+            {{ question.time_since }}
+        </small>
+    </div>
+</div>
+
+<hr>
+
+<h3>{{ question.answers.count }} Answer{{ question.answers.count|pluralize }}</h3>
+{% for answer in question.answers.all %}
+    <div style="border-left: 3px solid {% if answer.is_best %}#28a745{% else %}#007bff{% endif %}; padding-left: 15px; margin-bottom: 15px; {% if answer.is_best %}background: #f0fff0;{% endif %}">
+        <div style="display: flex; gap: 15px;">
+            <div style="text-align: center; min-width: 50px;">
+                <form method="post" action="{% url 'vote_answer' answer.pk 'up' %}" style="display: inline;">
+                    {% csrf_token %}
+                    <button type="submit" class="vote-btn {% if user in answer.upvotes.all %}active{% endif %}">▲</button>
+                </form>
+                <div style="font-size: 18px; margin: 5px 0;">{{ answer.vote_score }}</div>
+                <form method="post" action="{% url 'vote_answer' answer.pk 'down' %}" style="display: inline;">
+                    {% csrf_token %}
+                    <button type="submit" class="vote-btn {% if user in answer.downvotes.all %}active{% endif %}">▼</button>
+                </form>
+                {% if user == question.author and not answer.is_best %}
+                    <form method="post" action="{% url 'mark_best_answer' answer.pk %}" style="margin-top: 10px;">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-sm btn-success">✓ Best</button>
+                    </form>
+                {% endif %}
+            </div>
+            <div style="flex: 1;">
+                {% if answer.is_best %}<strong style="color: #28a745;">✓ Best Answer</strong><br>{% endif %}
+                <p>{{ answer.content }}</p>
+                <small>
+                    By: <a href="{% url 'user_profile' answer.author.username %}">{{ answer.author.username }}</a> ({{ answer.author.userprofile.reputation|default:0 }}) | 
+                    {{ answer.time_since }}
+                    {% if user == answer.author %}
+                        | <a href="{% url 'edit_answer' answer.pk %}">Edit</a>
+                        | <a href="{% url 'delete_answer' answer.pk %}" onclick="return confirm('Delete this answer?')">Delete</a>
+                    {% endif %}
+                </small>
+            </div>
+        </div>
+    </div>
+{% empty %}
+    <p>No answers yet.</p>
+{% endfor %}
+
+{% if user.is_authenticated %}
+<h3>Post an Answer</h3>
+<form method="post" action="{% url 'post_answer' question.pk %}">
+    {% csrf_token %}
+    <textarea name="content" rows="5" style="width: 100%; padding: 8px;" required></textarea><br>
+    <button type="submit" class="btn">Submit Answer</button>
+</form>
+{% else %}
+<p><a href="{% url 'login' %}">Login</a> to post an answer.</p>
+{% endif %}
+{% endblock %}

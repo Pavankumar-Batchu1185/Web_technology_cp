@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>Edit Answer</h1>
+
+<form method="post">
+    {% csrf_token %}
+    <label>Content:</label><br>
+    <textarea name="content" rows="8" style="width: 100%; padding: 8px;" required>{{ answer.content }}</textarea><br><br>
+    
+    <button type="submit" class="btn">Update Answer</button>
+    <a href="{% url 'question_detail' answer.question.pk %}" class="btn" style="background: #6c757d;">Cancel</a>
+</form>
+{% endblock %}

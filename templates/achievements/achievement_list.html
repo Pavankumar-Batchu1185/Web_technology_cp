@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>Student Achievements</h1>
+
+{% for achievement in achievements %}
+    <div style="border: 1px solid #ddd; padding: 15px; margin-bottom: 15px;">
+        <div style="display: flex; justify-content: space-between;">
+            <h3>{{ achievement.title }}</h3>
+            {% if user == achievement.student %}
+                <div>
+                    <a href="{% url 'edit_achievement' achievement.pk %}" class="btn btn-sm">Edit</a>
+                    <a href="{% url 'delete_achievement' achievement.pk %}" class="btn btn-sm btn-danger" onclick="return confirm('Delete this achievement?')">Delete</a>
+                </div>
+            {% endif %}
+        </div>
+        {% if achievement.image %}
+            <img src="{{ achievement.image.url }}" alt="{{ achievement.title }}" style="max-width: 400px; margin: 10px 0;">
+        {% endif %}
+        <p>{{ achievement.description }}</p>
+        <small>
+            Type: {{ achievement.get_achievement_type_display }} | 
+            Student: <a href="{% url 'user_profile' achievement.student.username %}">{{ achievement.student.username }}</a> | 
+            Date: {{ achievement.date_achieved|date:"M d, Y" }}
+        </small>
+    </div>
+{% empty %}
+    <p>No achievements posted yet.</p>
+{% endfor %}
+
+{% if achievements.has_other_pages %}
+<div class="pagination">
+    {% if achievements.has_previous %}
+        <a href="?page={{ achievements.previous_page_number }}">Previous</a>
+    {% endif %}
+    <span>Page {{ achievements.number }} of {{ achievements.paginator.num_pages }}</span>
+    {% if achievements.has_next %}
+        <a href="?page={{ achievements.next_page_number }}">Next</a>
+    {% endif %}
+</div>
+{% endif %}
+{% endblock %}

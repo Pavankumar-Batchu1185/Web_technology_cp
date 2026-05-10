@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>Edit Achievement</h1>
+
+<form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    <label>Title:</label><br>
+    <input type="text" name="title" value="{{ achievement.title }}" style="width: 100%; padding: 8px;" required><br><br>
+    
+    <label>Description:</label><br>
+    <textarea name="description" rows="6" style="width: 100%; padding: 8px;" required>{{ achievement.description }}</textarea><br><br>
+    
+    <label>Type:</label><br>
+    <select name="achievement_type" style="padding: 8px;" required>
+        {% for value, label in types %}
+            <option value="{{ value }}" {% if value == achievement.achievement_type %}selected{% endif %}>{{ label }}</option>
+        {% endfor %}
+    </select><br><br>
+    
+    <label>Date Achieved:</label><br>
+    <input type="date" name="date_achieved" value="{{ achievement.date_achieved|date:'Y-m-d' }}" style="padding: 8px;" required><br><br>
+    
+    <label>Image (optional):</label><br>
+    {% if achievement.image %}
+        <img src="{{ achievement.image.url }}" style="max-width: 200px; margin-bottom: 10px;"><br>
+    {% endif %}
+    <input type="file" name="image" accept="image/*" style="padding: 8px;"><br><br>
+    
+    <button type="submit" class="btn">Update Achievement</button>
+    <a href="{% url 'achievement_list' %}" class="btn" style="background: #6c757d;">Cancel</a>
+</form>
+{% endblock %}

@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>{{ profile_user.username }}'s Profile</h1>
+
+<div style="background: #f8f9fa; padding: 20px; margin-bottom: 20px; border-radius: 5px;">
+    <p><strong>Reputation:</strong> {{ profile.reputation }}</p>
+    <p><strong>Member since:</strong> {{ profile_user.date_joined|date:"M d, Y" }}</p>
+    {% if profile.bio %}
+        <p><strong>Bio:</strong> {{ profile.bio }}</p>
+    {% endif %}
+    {% if user == profile_user %}
+        <a href="{% url 'edit_profile' %}" class="btn btn-sm">Edit Profile</a>
+    {% endif %}
+</div>
+
+<h3>Questions ({{ questions.count }})</h3>
+{% for question in questions %}
+    <div style="border: 1px solid #ddd; padding: 10px; margin-bottom: 10px;">
+        <a href="{% url 'question_detail' question.pk %}">{{ question.title }}</a>
+        <small style="display: block; margin-top: 5px;">{{ question.vote_score }} votes | {{ question.answers.count }} answers | {{ question.time_since }}</small>
+    </div>
+{% empty %}
+    <p>No questions posted yet.</p>
+{% endfor %}
+
+<h3 style="margin-top: 30px;">Answers ({{ answers.count }})</h3>
+{% for answer in answers %}
+    <div style="border: 1px solid #ddd; padding: 10px; margin-bottom: 10px;">
+        <a href="{% url 'question_detail' answer.question.pk %}">{{ answer.question.title }}</a>
+        <p style="margin: 5px 0;">{{ answer.content|truncatewords:20 }}</p>
+        <small>{{ answer.vote_score }} votes | {{ answer.time_since }}</small>
+    </div>
+{% empty %}
+    <p>No answers posted yet.</p>
+{% endfor %}
+{% endblock %}

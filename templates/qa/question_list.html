@@ -1,0 +1,73 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>Questions</h1>
+
+<div style="margin-bottom: 20px;">
+    <form method="get" style="display: inline;">
+        <input type="text" name="search" placeholder="Search questions..." value="{{ request.GET.search }}" style="padding: 8px; width: 300px;">
+        <button type="submit" class="btn btn-sm">Search</button>
+    </form>
+    
+    <div style="margin-top: 10px;">
+        <strong>Sort:</strong>
+        <a href="?sort=newest" {% if current_sort == 'newest' %}style="font-weight: bold;"{% endif %}>Newest</a> |
+        <a href="?sort=votes" {% if current_sort == 'votes' %}style="font-weight: bold;"{% endif %}>Most Voted</a> |
+        <a href="?sort=answers" {% if current_sort == 'answers' %}style="font-weight: bold;"{% endif %}>Most Answered</a>
+    </div>
+    
+    <div style="margin-top: 10px;">
+        <strong>Category:</strong>
+        <a href="{% url 'question_list' %}">All</a>
+        {% for cat in categories %}
+            | <a href="?category={{ cat.id }}">{{ cat.name }}</a>
+        {% endfor %}
+    </div>
+    
+    <div style="margin-top: 10px;">
+        <strong>Tags:</strong>
+        {% for tag in tags %}
+            <a href="?tag={{ tag.id }}" style="background: #e0e0e0; padding: 3px 8px; margin: 2px; display: inline-block; border-radius: 3px; text-decoration: none; font-size: 12px;">{{ tag.name }}</a>
+        {% endfor %}
+    </div>
+</div>
+
+{% for question in questions %}
+    <div style="border: 1px solid #ddd; padding: 15px; margin-bottom: 15px;">
+        <div style="display: flex; gap: 15px;">
+            <div style="text-align: center; min-width: 60px;">
+                <div>{{ question.vote_score }} votes</div>
+                <div>{{ question.answer_count }} answers</div>
+            </div>
+            <div style="flex: 1;">
+                <h3><a href="{% url 'question_detail' question.pk %}">{{ question.title }}</a></h3>
+                <p>{{ question.content|truncatewords:30 }}</p>
+                <div>
+                    {% for tag in question.tags.all %}
+                        <span style="background: #e0e0e0; padding: 2px 6px; margin-right: 5px; font-size: 11px; border-radius: 3px;">{{ tag.name }}</span>
+                    {% endfor %}
+                </div>
+                <small>
+                    Category: {{ question.category.name }} | 
+                    By: <a href="{% url 'user_profile' question.author.username %}">{{ question.author.username }}</a> | 
+                    {{ question.time_since }}
+                </small>
+            </div>
+        </div>
+    </div>
+{% empty %}
+    <p>No questions yet.</p>
+{% endfor %}
+
+{% if questions.has_other_pages %}
+<div class="pagination">
+    {% if questions.has_previous %}
+        <a href="?page={{ questions.previous_page_number }}">Previous</a>
+    {% endif %}
+    <span>Page {{ questions.number }} of {{ questions.paginator.num_pages }}</span>
+    {% if questions.has_next %}
+        <a href="?page={{ questions.next_page_number }}">Next</a>
+    {% endif %}
+</div>
+{% endif %}
+{% endblock %}

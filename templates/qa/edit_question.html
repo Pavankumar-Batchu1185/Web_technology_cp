@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>Edit Question</h1>
+
+<form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    <label>Title:</label><br>
+    <input type="text" name="title" value="{{ question.title }}" style="width: 100%; padding: 8px;" required><br><br>
+    
+    <label>Content:</label><br>
+    <textarea name="content" rows="8" style="width: 100%; padding: 8px;" required>{{ question.content }}</textarea><br><br>
+    
+    <label>Category:</label><br>
+    <select name="category" style="padding: 8px;" required>
+        {% for cat in categories %}
+            <option value="{{ cat.id }}" {% if cat.id == question.category.id %}selected{% endif %}>{{ cat.name }}</option>
+        {% endfor %}
+    </select><br><br>
+    
+    <label>Tags (comma-separated):</label><br>
+    <input type="text" name="tags" value="{{ tag_names }}" placeholder="python, django, web" style="width: 100%; padding: 8px;"><br><br>
+    
+    <label>Image (optional):</label><br>
+    {% if question.image %}
+        <img src="{{ question.image.url }}" style="max-width: 200px; margin-bottom: 10px;"><br>
+    {% endif %}
+    <input type="file" name="image" accept="image/*" style="padding: 8px;"><br><br>
+    
+    <button type="submit" class="btn">Update Question</button>
+    <a href="{% url 'question_detail' question.pk %}" class="btn" style="background: #6c757d;">Cancel</a>
+</form>
+{% endblock %}

@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>Post a Question</h1>
+
+<form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    <label>Title:</label><br>
+    <input type="text" name="title" style="width: 100%; padding: 8px;" required><br><br>
+    
+    <label>Content:</label><br>
+    <textarea name="content" rows="8" style="width: 100%; padding: 8px;" required></textarea><br><br>
+    
+    <label>Category:</label><br>
+    <select name="category" style="padding: 8px;" required>
+        <option value="">Select a category</option>
+        {% for cat in categories %}
+            <option value="{{ cat.id }}">{{ cat.name }}</option>
+        {% endfor %}
+    </select><br><br>
+    
+    <label>Tags (comma-separated):</label><br>
+    <input type="text" name="tags" placeholder="python, django, web" style="width: 100%; padding: 8px;"><br><br>
+    
+    <label>Image (optional):</label><br>
+    <input type="file" name="image" accept="image/*" style="padding: 8px;"><br><br>
+    
+    <button type="submit" class="btn">Post Question</button>
+</form>
+{% endblock %}

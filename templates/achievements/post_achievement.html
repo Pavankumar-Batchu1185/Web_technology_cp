@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>Post an Achievement</h1>
+
+<form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    <label>Title:</label><br>
+    <input type="text" name="title" style="width: 100%; padding: 8px;" required><br><br>
+    
+    <label>Description:</label><br>
+    <textarea name="description" rows="6" style="width: 100%; padding: 8px;" required></textarea><br><br>
+    
+    <label>Type:</label><br>
+    <select name="achievement_type" style="padding: 8px;" required>
+        <option value="">Select type</option>
+        {% for value, label in types %}
+            <option value="{{ value }}">{{ label }}</option>
+        {% endfor %}
+    </select><br><br>
+    
+    <label>Date Achieved:</label><br>
+    <input type="date" name="date_achieved" style="padding: 8px;" required><br><br>
+    
+    <label>Image (optional):</label><br>
+    <input type="file" name="image" accept="image/*" style="padding: 8px;"><br><br>
+    
+    <button type="submit" class="btn">Post Achievement</button>
+</form>
+{% endblock %}
